@@ -1,8 +1,10 @@
 # flashttp
 ___
-##Lightweight Promise based Http Client for the front-end
+
+## Lightweight Promise based Http Client for the front-end
 ___
-#Features 
+
+# Features 
 + Update a web page without reloading the page
 + Request data from a server
 + Receive data from a server
