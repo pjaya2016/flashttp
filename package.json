@@ -1,75 +1,20 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "flashttp",
-        "scope": null,
-        "escapedName": "flashttp",
-        "name": "flashttp",
-        "rawSpec": "",
-        "spec": "latest",
-        "type": "tag"
-      },
-      "/Users/FULLSTACK/Documents/ProjectForRecurmentCompany/Web"
-    ]
-  ],
-  "_from": "flashttp@latest",
-  "_id": "flashttp@1.0.0",
-  "_inCache": true,
-  "_location": "/flashttp",
-  "_nodeVersion": "6.10.0",
-  "_npmOperationalInternal": {
-    "host": "s3://npm-registry-packages",
-    "tmp": "tmp/flashttp-1.0.0.tgz_1495653471301_0.24095184891484678"
-  },
-  "_npmUser": {
-    "name": "pjaya_2016",
-    "email": "pjayamayooragan2016@gmail.com"
-  },
-  "_npmVersion": "4.5.0",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "flashttp",
-    "scope": null,
-    "escapedName": "flashttp",
-    "name": "flashttp",
-    "rawSpec": "",
-    "spec": "latest",
-    "type": "tag"
-  },
-  "_requiredBy": [
-    "#USER"
-  ],
-  "_resolved": "https://registry.npmjs.org/flashttp/-/flashttp-1.0.0.tgz",
-  "_shasum": "0da8ec47e44e6bc820235a2bce59e1cbe3a1b604",
-  "_shrinkwrap": null,
-  "_spec": "flashttp",
-  "_where": "/Users/FULLSTACK/Documents/ProjectForRecurmentCompany/Web",
-  "author": {
-    "name": "Jayamayooragan"
-  },
-  "dependencies": {},
-  "description": "Lightweight Promise based Http Client for the front-end",
-  "devDependencies": {},
-  "directories": {},
-  "dist": {
-    "shasum": "0da8ec47e44e6bc820235a2bce59e1cbe3a1b604",
-    "tarball": "https://registry.npmjs.org/flashttp/-/flashttp-1.0.0.tgz"
-  },
-  "keywords": [],
-  "license": "ISC",
-  "main": "flashttp.js",
-  "maintainers": [
-    {
-      "name": "pjaya_2016",
-      "email": "pjayamayooragan2016@gmail.com"
-    }
-  ],
   "name": "flashttp",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
+  "version": "1.0.0",
+  "description": "Lightweight Promise based Http Client ",
+  "main": "flashttp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pjaya2016/flashttp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pjaya2016/flashttp/issues"
+  },
+  "homepage": "https://github.com/pjaya2016/flashttp#readme"
 }
