@@ -15,33 +15,33 @@ ___
 
 # Installing 
 
-# **npm install flashttp**
+`>` ## **npm install flashttp**
 
 ___
 
 > # Example 
 
->> ### Performing a GET request
+> ### Performing a GET request
 
 ```
 ```
 
->> ### Performing a POST request
+> ### Performing a POST request
 
 ```
 ```
 
->> ### Performing a PUT request
+> ### Performing a PUT request
 
 ```
 ```
 
->> ### Performing a PATCH request
+> ### Performing a PATCH request
 
 ```
 ```
 
->> ### Performing a DELETE request
+> ### Performing a DELETE request
 
 ```
 ```
