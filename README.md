@@ -15,8 +15,7 @@ ___
 
 # Installing 
 ```
-npm install flashttp
-
+# **npm install flashttp**
 ```
 ___
 
