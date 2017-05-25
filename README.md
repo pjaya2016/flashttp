@@ -9,7 +9,7 @@ ___
 + Request data from a server
 + Receive data from a server
 + Send data to a server
-+ Supports the [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
++ Supports [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 
 ___
 
