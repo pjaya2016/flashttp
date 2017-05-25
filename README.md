@@ -24,10 +24,25 @@ ___
 
 >> ### Performing a GET request
 
+```
+```
+
 >> ### Performing a POST request
+
+```
+```
 
 >> ### Performing a PUT request
 
+```
+```
+
 >> ### Performing a PATCH request
 
+```
+```
+
 >> ### Performing a DELETE request
+
+```
+```
