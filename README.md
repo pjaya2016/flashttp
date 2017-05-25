@@ -15,11 +15,11 @@ ___
 
 # Installing 
 
-`>` ## **npm install flashttp**
+ ```npm install flashttp```
 
 ___
 
-> # Example 
+ # Example 
 
 > ### Performing a GET request
 
