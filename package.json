@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/pjaya2016/flashttp/issues"
   },
-  "homepage": "https://github.com/pjaya2016/flashttp#readme"
+  "homepage": "https://github.com/pjaya2016/flashttp#readme",
+  "dependencies": {
+    "detect-node": "^2.0.3"
+  }
 }
