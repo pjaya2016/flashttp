@@ -24,33 +24,59 @@ ___
 > ### Performing a GET request
 
 ```
-let flashttp = require('flashttp');
-
 flashttp.Get("URL",{
     'Content-Type': 'application/json',
   }).then(res => {
     console.log(res);
   }).catch(err => {
     console.log(err);
-  })
+})
 ```
 
 > ### Performing a POST request
 
 ```
+flashttp.Post("URL",{
+    'Content-Type': 'application/json',
+  },{}).then(res => {
+    console.log(res);
+  }).catch(err => {
+    console.log(err);
+})
 ```
 
 > ### Performing a PUT request
 
 ```
+flashttp.Put("URL",{
+    'Content-Type': 'application/json',
+  },{}).then(res => {
+    console.log(res);
+  }).catch(err => {
+    console.log(err);
+})
 ```
 
 > ### Performing a PATCH request
 
 ```
+flashttp.Patch("URL",{
+    'Content-Type': 'application/json',
+  },{}).then(res => {
+    console.log(res);
+  }).catch(err => {
+    console.log(err);
+})
 ```
 
 > ### Performing a DELETE request
 
 ```
+flashttp.Delete("URL",{
+    'Content-Type': 'application/json',
+  },{}).then(res => {
+    console.log(res);
+  }).catch(err => {
+    console.log(err);
+})
 ```
