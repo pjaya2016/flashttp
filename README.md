@@ -1,7 +1,7 @@
 # flashttp
 ___
 
-## Lightweight Promise based Http Client for the front-end
+## Lightweight Promise based Http Client for the front-end (TESTING)
 ___
 
 # Features 
@@ -24,6 +24,15 @@ ___
 > ### Performing a GET request
 
 ```
+let flashttp = require('flashttp');
+
+flashttp.Get("URL",{
+    'Content-Type': 'application/json',
+  }).then(res => {
+    console.log(res);
+  }).catch(err => {
+    console.log(err);
+  })
 ```
 
 > ### Performing a POST request
