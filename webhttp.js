@@ -54,7 +54,7 @@ var ParseXHTTPJSONRequest = function(res, status, statusMessage){
  * @return Promise which is resolved or  rejected
  */
 
-var _get = function(Url = '', Headers = []) {
+var _get = function(Url = '', Headers = {}) {
     return new Promise(function(resolve, reject){
         if (Url.trim() === '') {
             reject("Please provide a URL");
@@ -89,7 +89,7 @@ var _get = function(Url = '', Headers = []) {
  * POST Request 
  * @return Promise which is resolved or  rejected
  */
-var _post = (Url = '', Headers = [], obj = null) => {
+var _post = (Url = '', Headers = {}, obj = null) => {
     return new Promise(
         (resolve, reject) => {
 
@@ -128,7 +128,7 @@ var _post = (Url = '', Headers = [], obj = null) => {
  * PUT Request 
  * @return Promise which is resolved or  rejected
  */
-var _put = (Url = '', Headers = [], obj = null) => {
+var _put = (Url = '', Headers = {}, obj = null) => {
     return new Promise(
         (resolve, reject) => {
             if (Url.trim() === '') {
@@ -166,7 +166,7 @@ var _put = (Url = '', Headers = [], obj = null) => {
  * PATCH Request 
  * @return Promise which is resolved or  rejected
  */
-var _patch = (Url = '', Headers = [], obj = null) => {
+var _patch = (Url = '', Headers = {}, obj = null) => {
     return new Promise(
         (resolve, reject) => {
             if (Url.trim() === '') {
@@ -204,7 +204,7 @@ var _patch = (Url = '', Headers = [], obj = null) => {
  * DELETE Request 
  * @return Promise which is resolved or  rejected
  */
-var _delete = (Url = '', Headers = []) => {
+var _delete = (Url = '', Headers = {}) => {
     return new Promise(
         (resolve, reject) => {
             if (Url.trim() === '') {
