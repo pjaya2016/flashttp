@@ -1,6 +1,6 @@
 {
   "name": "flashttp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lightweight Promise based Http Client ",
   "main": "flashttp.js",
   "scripts": {
