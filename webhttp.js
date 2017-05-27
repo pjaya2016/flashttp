@@ -5,7 +5,7 @@
  * e.g. { statusMsg: "Success", responseCode: 0 }
  */
 
-var checkStatusXHTTPResponse = function(status){
+var checkStatusXHTTPResponse = function (status) {
     /*
     responseCode  = 0 // codes that are bettween 200 - 299
     responseCode  = 1 // codes that are bettween 300 - 399
@@ -40,7 +40,7 @@ var checkStatusXHTTPResponse = function(status){
     }
  */
 
-var ParseXHTTPJSONRequest = function(res, status, statusMessage){
+var ParseXHTTPJSONRequest = function (res, status, statusMessage) {
     return {
         Response: JSON.parse(res),
         Status: status,
@@ -54,13 +54,13 @@ var ParseXHTTPJSONRequest = function(res, status, statusMessage){
  * @return Promise which is resolved or  rejected
  */
 
-var _get = function(Url = '', Headers = {}) {
-    return new Promise(function(resolve, reject){
+var _get = (Url = '', Headers = {}) => {
+    return new Promise((resolve, reject) => {
         if (Url.trim() === '') {
             reject("Please provide a URL");
         }
         var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
+        xhttp.onreadystatechange = () => {
             if (this.readyState == 4) {
                 var ResCode = checkStatusXHTTPResponse(this.status);
                 if (ResCode.responseCode == 0 || ResCode.responseCode == 1) {
