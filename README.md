@@ -23,7 +23,7 @@ ___
 
 > ### Performing a GET request
 
-```
+```javascript
 flashttp.Get("URL",{
     'Content-Type': 'application/json',
   }).then(res => {
@@ -35,7 +35,7 @@ flashttp.Get("URL",{
 
 > ### Performing a POST request
 
-```
+```javascript
 flashttp.Post("URL",{
     'Content-Type': 'application/json',
   },{}).then(res => {
@@ -47,7 +47,7 @@ flashttp.Post("URL",{
 
 > ### Performing a PUT request
 
-```
+```javascript
 flashttp.Put("URL",{
     'Content-Type': 'application/json',
   },{}).then(res => {
@@ -59,7 +59,7 @@ flashttp.Put("URL",{
 
 > ### Performing a PATCH request
 
-```
+```javascript
 flashttp.Patch("URL",{
     'Content-Type': 'application/json',
   },{}).then(res => {
