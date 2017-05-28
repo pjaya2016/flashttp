@@ -71,7 +71,7 @@ flashttp.Patch("URL",{
 
 > ### Performing a DELETE request
 
-```
+```javascript
 flashttp.Delete("URL",{
     'Content-Type': 'application/json',
   },{}).then(res => {
