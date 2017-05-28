@@ -1,7 +1,7 @@
 # flashttp
 ___
 
-## Lightweight Promise based Http Client for the front-end (TESTING)
+## Lightweight Promise based Http Client 
 ___
 
 # Features 
@@ -31,6 +31,7 @@ flashttp.Get("URL",{
   }).catch(err => {
     console.log(err);
 })
+//Response Object { Response: Object, Status: 200, StatusMessage: "Success -> OK", Headers: Object }
 ```
 
 > ### Performing a POST request
@@ -43,6 +44,7 @@ flashttp.Post("URL",{
   }).catch(err => {
     console.log(err);
 })
+//Response Object { Response: Object, Status: 200, StatusMessage: "Success -> OK", Headers: Object }
 ```
 
 > ### Performing a PUT request
@@ -55,6 +57,7 @@ flashttp.Put("URL",{
   }).catch(err => {
     console.log(err);
 })
+//Response Object { Response: Object, Status: 200, StatusMessage: "Success -> OK", Headers: Object }
 ```
 
 > ### Performing a PATCH request
@@ -67,8 +70,8 @@ flashttp.Patch("URL",{
   }).catch(err => {
     console.log(err);
 })
+//Response Object { Response: Object, Status: 200, StatusMessage: "Success -> OK", Headers: Object }
 ```
-
 > ### Performing a DELETE request
 
 ```javascript
@@ -79,4 +82,5 @@ flashttp.Delete("URL",{
   }).catch(err => {
     console.log(err);
 })
+//Response Object { Response: Object, Status: 200, StatusMessage: "Success -> OK", Headers: Object }
 ```
