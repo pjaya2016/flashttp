@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/pjaya2016/flashttp#readme",
   "dependencies": {
-    "detect-node": "^2.0.3"
+    "detect-node": "^2.0.3",
+    "http-status": "^1.0.1"
   }
 }

@@ -1,30 +1,31 @@
 "use strict";
+let HTTPStatus = require('http-status');
 /**
  * @param {int} status
  * @return {Object} this object contains statusMsg && responseCode 
  * e.g. { statusMsg: "Success", responseCode: 0 }
  */
 
-var checkStatusXHTTPResponse = function (status) {
+let checkStatusXHTTPResponse = (status) => {
     /*
     responseCode  = 0 // codes that are bettween 200 - 299
     responseCode  = 1 // codes that are bettween 300 - 399
     responseCode  = 2 // codes that are bettween 400 - 499
     responseCode  = 2 // codes that are bettween 500 - 599
      */
-    var result;
+    let result;
     switch (true) {
-        case status == 200 || status < 300:
-            result = { statusMsg: "Success", responseCode: 0 }
+        case status === 200 || status < 300:
+            result = { statusMsg: "Success -> " + HTTPStatus[status], responseCode: 0 }
             break;
-        case status == 300 || status < 400:
-            result = { statusMsg: " Redirection", responseCode: 1 }
+        case status === 300 || status < 400:
+            result = { statusMsg: " Redirection -> " + HTTPStatus[status], responseCode: 1 }
             break;
-        case status == 400 || status < 500:
-            result = { statusMsg: "Client errors", responseCode: 2 }
+        case status === 400 || status < 500:
+            result = { statusMsg: "Client errors -> " + HTTPStatus[status], responseCode: 2 }
             break;
-        case status == 500 || status < 600:
-            result = { statusMsg: "Server error", responseCode: 3 }
+        case status === 500 || status < 600:
+            result = { statusMsg: "Server error -> " + HTTPStatus[status], responseCode: 3 }
             break;
     }
     return result;
@@ -40,13 +41,35 @@ var checkStatusXHTTPResponse = function (status) {
     }
  */
 
-var ParseXHTTPJSONRequest = function (res, status, statusMessage) {
+var ParseXHTTPJSONRequest = (res, status, statusMessage, headers = {}) => {
     return {
-        Response: JSON.parse(res),
+        Response: res.length <= 0 ? "NO RESPONSE" : JSON.parse(res),
         Status: status,
-        StatusMessage: statusMessage
+        StatusMessage: statusMessage,
+        Headers: headers
     }
 }
+
+
+let FormatHeader = (header) => {
+    if (header.length <= 0) return {};
+    header = header.replace(/;/g, "").match(/[^\n:]+/g);
+    let str = "{";
+    header.map((item, i) => {
+        item = item.trim();
+        if (i % 2 == 0) {
+            str += '"' + item + '"' + ':'
+        } else {
+            str += '"' + item + '"'
+            if (header.length != i + 1) {
+                str += ','
+            }
+        }
+    })
+    str += "}";
+    return JSON.parse(str.trim());
+}
+
 
 /**
  * @param {string ,  Object  } Url, Headers
@@ -54,25 +77,52 @@ var ParseXHTTPJSONRequest = function (res, status, statusMessage) {
  * @return Promise which is resolved or  rejected
  */
 
-var _get = (Url = '', Headers = {}) => {
+let _get = (Url = '', Headers = { "Content-Type": "application/json" }) => {
     return new Promise((resolve, reject) => {
         if (Url.trim() === '') {
             reject("Please provide a URL");
         }
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = () => {
-            if (this.readyState == 4) {
-                var ResCode = checkStatusXHTTPResponse(this.status);
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.HEADERS_RECEIVED && this.responseText.trim().length > 0) {
+                let Headers = FormatHeader(this.getAllResponseHeaders());
+                let ResCode = checkStatusXHTTPResponse(this.status);
+
                 if (ResCode.responseCode == 0 || ResCode.responseCode == 1) {
-                    resolve(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                    resolve(ParseXHTTPJSONRequest(  this.responseText,
+                                                    this.status      , 
+                                                    ResCode.statusMsg, 
+                                                    Headers
+                                                  ));
                 } else if (ResCode.responseCode == 2 || ResCode.responseCode == 3) {
-                    reject(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                    reject(ParseXHTTPJSONRequest(   this.responseText,
+                                                    this.status, 
+                                                    ResCode.statusMsg, 
+                                                    Headers
+                                                 ));
                 }
             }
         };
+
+        xhttp.addEventListener("load", transferComplete);
+        xhttp.addEventListener("error", transferFailed);
+        xhttp.addEventListener("abort", transferCanceled);
+
+        function transferComplete(evt) {
+            resolve("The transfer is complete.");
+        }
+
+        function transferFailed(evt) {
+            reject("An error occurred while transferring the file. Please make sure your url is correct");
+        }
+
+        function transferCanceled(evt) {
+            reject("The transfer has been canceled by the user.");
+        }
+
         xhttp.open("GET", Url, true);
         if (typeof Headers == 'object') {
-            for (var key in Headers) {
+            for (let key in Headers) {
                 if (Headers.hasOwnProperty(key)) {
                     xhttp.setRequestHeader(key, Headers[key]);
                 }
@@ -80,6 +130,7 @@ var _get = (Url = '', Headers = {}) => {
         } else {
             reject("Please Provide an Header object with a format e.g. { 'Content-Type' : 'application/x-www-form-urlencoded' }");
         }
+
         xhttp.send();
     });
 }
@@ -89,7 +140,7 @@ var _get = (Url = '', Headers = {}) => {
  * POST Request 
  * @return Promise which is resolved or  rejected
  */
-var _post = (Url = '', Headers = {}, obj = null) => {
+let _post = (Url = '', Headers = { "Content-Type": "application/json" }, obj = null) => {
     return new Promise(
         (resolve, reject) => {
 
@@ -97,20 +148,47 @@ var _post = (Url = '', Headers = {}, obj = null) => {
                 reject("Please provide a URL");
             }
 
-            var xhttp = new XMLHttpRequest();
+            let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    var ResCode = checkStatusXHTTPResponse(this.status);
+                if (this.readyState == 4 && this.HEADERS_RECEIVED && this.responseText.trim().length > 0) {
+                    let Headers = FormatHeader(this.getAllResponseHeaders());
+                    let ResCode = checkStatusXHTTPResponse(this.status);
+
                     if (ResCode.responseCode == 0 || ResCode.responseCode == 1) {
-                        resolve(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                        resolve(ParseXHTTPJSONRequest(  this.responseText, 
+                                                        this.status, 
+                                                        ResCode.statusMsg, 
+                                                        Headers
+                                                     ));
                     } else if (ResCode.responseCode == 2 || ResCode.responseCode == 3) {
-                        reject(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                        reject(ParseXHTTPJSONRequest(   this.responseText, 
+                                                        this.status, 
+                                                        ResCode.statusMsg, 
+                                                        Headers
+                                                     ));
                     }
                 }
             };
+
+            xhttp.addEventListener("load", transferComplete);
+            xhttp.addEventListener("error", transferFailed);
+            xhttp.addEventListener("abort", transferCanceled);
+
+            function transferComplete(evt) {
+                resolve("The transfer is complete.");
+            }
+
+            function transferFailed(evt) {
+                reject("An error occurred while transferring the file. Please make sure your url is correct");
+            }
+
+            function transferCanceled(evt) {
+                reject("The transfer has been canceled by the user.");
+            }
+
             xhttp.open("POST", Url, true);
             if (typeof Headers == 'object') {
-                for (var key in Headers) {
+                for (let key in Headers) {
                     if (Headers.hasOwnProperty(key)) {
                         xhttp.setRequestHeader(key, Headers[key]);
                     }
@@ -118,7 +196,8 @@ var _post = (Url = '', Headers = {}, obj = null) => {
             } else {
                 reject("Please Provide an Header object with a format e.g. { 'Content-Type' : 'application/x-www-form-urlencoded' }");
             }
-            (obj !== null) ? xhttp.send(JSON.stringify(obj)) : xhttp.send(JSON.stringify({}));
+
+                (obj !== null) ? xhttp.send(JSON.stringify(obj)) : xhttp.send(JSON.stringify({}));
         }
     );
 }
@@ -128,27 +207,54 @@ var _post = (Url = '', Headers = {}, obj = null) => {
  * PUT Request 
  * @return Promise which is resolved or  rejected
  */
-var _put = (Url = '', Headers = {}, obj = null) => {
+let _put = (Url = '', Headers = { "Content-Type": "application/json" }, obj = null) => {
     return new Promise(
         (resolve, reject) => {
             if (Url.trim() === '') {
                 reject("Please provide a URL");
             }
 
-            var xhttp = new XMLHttpRequest();
+            let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    var ResCode = checkStatusXHTTPResponse(this.status);
-                    if (ResCode.responseCode == 0 || ResCode.responseCode == 1) {
-                        resolve(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                if (this.readyState == 4 && this.HEADERS_RECEIVED && this.responseText.trim().length > 0) {
+                    let Headers = FormatHeader(this.getAllResponseHeaders());
+                    let ResCode = checkStatusXHTTPResponse(this.status);
+
+                     if (ResCode.responseCode == 0 || ResCode.responseCode == 1) {
+                        resolve(ParseXHTTPJSONRequest(  this.responseText, 
+                                                        this.status, 
+                                                        ResCode.statusMsg, 
+                                                        Headers
+                                                     ));
                     } else if (ResCode.responseCode == 2 || ResCode.responseCode == 3) {
-                        reject(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                        reject(ParseXHTTPJSONRequest(   this.responseText, 
+                                                        this.status, 
+                                                        ResCode.statusMsg, 
+                                                        Headers
+                                                     ));
                     }
                 }
             };
+
+            xhttp.addEventListener("load", transferComplete);
+            xhttp.addEventListener("error", transferFailed);
+            xhttp.addEventListener("abort", transferCanceled);
+
+            function transferComplete(evt) {
+                resolve("The transfer is complete.");
+            }
+
+            function transferFailed(evt) {
+                reject("An error occurred while transferring the file. Please make sure your url is correct");
+            }
+
+            function transferCanceled(evt) {
+                reject("The transfer has been canceled by the user.");
+            }
+
             xhttp.open("PUT", Url, true);
             if (typeof Headers == 'object') {
-                for (var key in Headers) {
+                for (let key in Headers) {
                     if (Headers.hasOwnProperty(key)) {
                         xhttp.setRequestHeader(key, Headers[key]);
                     }
@@ -156,7 +262,7 @@ var _put = (Url = '', Headers = {}, obj = null) => {
             } else {
                 reject("Please Provide an Header object with a format e.g. { 'Content-Type' : 'application/x-www-form-urlencoded' }");
             }
-            (obj !== null) ? xhttp.send(JSON.stringify(obj)) : xhttp.send(JSON.stringify({}));
+                (obj !== null) ? xhttp.send(JSON.stringify(obj)) : xhttp.send(JSON.stringify({}));
         }
     );
 }
@@ -166,27 +272,53 @@ var _put = (Url = '', Headers = {}, obj = null) => {
  * PATCH Request 
  * @return Promise which is resolved or  rejected
  */
-var _patch = (Url = '', Headers = {}, obj = null) => {
+let _patch = (Url = '', Headers = { "Content-Type": "application/json" }, obj = null) => {
     return new Promise(
         (resolve, reject) => {
             if (Url.trim() === '') {
                 reject("Please provide a URL");
             }
-            var xhttp = new XMLHttpRequest();
+            let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    var ResCode = checkStatusXHTTPResponse(this.status);
+                if (this.readyState == 4 && this.HEADERS_RECEIVED && this.responseText.trim().length > 0) {
+                    let Headers = FormatHeader(this.getAllResponseHeaders());
+                    let ResCode = checkStatusXHTTPResponse(this.status);
+
                     if (ResCode.responseCode == 0 || ResCode.responseCode == 1) {
-                        resolve(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                        resolve(ParseXHTTPJSONRequest(  this.responseText, 
+                                                        this.status, 
+                                                        ResCode.statusMsg, 
+                                                        Headers
+                                                     ));
                     } else if (ResCode.responseCode == 2 || ResCode.responseCode == 3) {
-                        reject(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                        reject(ParseXHTTPJSONRequest(   this.responseText, 
+                                                        this.status, 
+                                                        ResCode.statusMsg, 
+                                                        Headers
+                                                     ));
                     }
                 }
             };
 
+            xhttp.addEventListener("load", transferComplete);
+            xhttp.addEventListener("error", transferFailed);
+            xhttp.addEventListener("abort", transferCanceled);
+
+            function transferComplete(evt) {
+                resolve("The transfer is complete.");
+            }
+
+            function transferFailed(evt) {
+                reject("An error occurred while transferring the file. Please make sure your url is correct");
+            }
+
+            function transferCanceled(evt) {
+                reject("The transfer has been canceled by the user.");
+            }
+
             xhttp.open("PATCH", Url, true);
             if (typeof Headers == 'object') {
-                for (var key in Headers) {
+                for (let key in Headers) {
                     if (Headers.hasOwnProperty(key)) {
                         xhttp.setRequestHeader(key, Headers[key]);
                     }
@@ -194,7 +326,7 @@ var _patch = (Url = '', Headers = {}, obj = null) => {
             } else {
                 reject("Please Provide an Header object with a format e.g. { 'Content-Type' : 'application/x-www-form-urlencoded' }");
             }
-            (obj !== null) ? xhttp.send(JSON.stringify(obj)) : xhttp.send(JSON.stringify({}));
+                (obj !== null) ? xhttp.send(JSON.stringify(obj)) : xhttp.send(JSON.stringify({}));
         }
     );
 }
@@ -204,26 +336,53 @@ var _patch = (Url = '', Headers = {}, obj = null) => {
  * DELETE Request 
  * @return Promise which is resolved or  rejected
  */
-var _delete = (Url = '', Headers = {}) => {
+let _delete = (Url = '', Headers = { "Content-Type": "application/json" }) => {
     return new Promise(
         (resolve, reject) => {
             if (Url.trim() === '') {
                 reject("Please provide a URL");
             }
-            var xhttp = new XMLHttpRequest();
+            let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    var ResCode = checkStatusXHTTPResponse(this.status);
-                    if (ResCode.responseCode == 0 || ResCode.responseCode == 1) {
-                        resolve(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                if (this.readyState == 4 && this.HEADERS_RECEIVED && this.responseText.trim().length > 0) {
+                    let Headers = FormatHeader(this.getAllResponseHeaders());
+                    let ResCode = checkStatusXHTTPResponse(this.status);
+
+                     if (ResCode.responseCode == 0 || ResCode.responseCode == 1) {
+                        resolve(ParseXHTTPJSONRequest(  this.responseText, 
+                                                        this.status, 
+                                                        ResCode.statusMsg, 
+                                                        Headers
+                                                     ));
                     } else if (ResCode.responseCode == 2 || ResCode.responseCode == 3) {
-                        reject(ParseXHTTPJSONRequest(this.responseText, this.status, ResCode.statusMsg));
+                        reject(ParseXHTTPJSONRequest(   this.responseText, 
+                                                        this.status, 
+                                                        ResCode.statusMsg, 
+                                                        Headers
+                                                     ));
                     }
                 }
             };
+
+            xhttp.addEventListener("load", transferComplete);
+            xhttp.addEventListener("error", transferFailed);
+            xhttp.addEventListener("abort", transferCanceled);
+
+
+            function transferComplete(evt) {
+                resolve("The transfer is complete.");
+            }
+
+            function transferFailed(evt) {
+                reject("An error occurred while transferring the file. Please make sure your url is correct");
+            }
+
+            function transferCanceled(evt) {
+                reject("The transfer has been canceled by the user.");
+            }
             xhttp.open("DELETE", Url, true);
             if (typeof Headers == 'object') {
-                for (var key in Headers) {
+                for (let key in Headers) {
                     if (Headers.hasOwnProperty(key)) {
                         xhttp.setRequestHeader(key, Headers[key]);
                     }
@@ -231,6 +390,7 @@ var _delete = (Url = '', Headers = {}) => {
             } else {
                 reject("Please Provide an Header object with a format e.g. { 'Content-Type' : 'application/x-www-form-urlencoded' }");
             }
+     
             xhttp.send();
         }
     );
