@@ -24,6 +24,11 @@ ___
 > ### Performing a GET request
 
 ```javascript
+/**
+* For the GET request you will need to provide the URL(GET or GET/:ID) and Optionally Headers
+e.g. { 'Content-Type': 'application/json , 'Authorization' : 'TOKEN'}
+**/ 
+
 flashttp.Get("URL",{
     'Content-Type': 'application/json',
   }).then(res => {
@@ -37,6 +42,11 @@ flashttp.Get("URL",{
 > ### Performing a POST request
 
 ```javascript
+/**
+* For the POST request you will need to provide the URL , Object(BODY) and Optionally Headers
+e.g. { 'Content-Type': 'application/json , 'Authorization' : 'TOKEN'}
+**/ 
+
 flashttp.Post("URL",{
     'Content-Type': 'application/json',
   },{}).then(res => {
@@ -50,6 +60,11 @@ flashttp.Post("URL",{
 > ### Performing a PUT request
 
 ```javascript
+/**
+* For the PUT request you will need to provide the URL(PUT or PUT/:ID) , Object(BODY) and Optionally Headers
+e.g. { 'Content-Type': 'application/json , 'Authorization' : 'TOKEN'}
+**/ 
+
 flashttp.Put("URL",{
     'Content-Type': 'application/json',
   },{}).then(res => {
@@ -63,6 +78,11 @@ flashttp.Put("URL",{
 > ### Performing a PATCH request
 
 ```javascript
+/**
+* For the PATCH request you will need to provide the URL(PATCH or PATHC:ID) , Object(BODY) and Optionally Headers
+e.g. { 'Content-Type': 'application/json , 'Authorization' : 'TOKEN'}
+**/ 
+
 flashttp.Patch("URL",{
     'Content-Type': 'application/json',
   },{}).then(res => {
@@ -75,6 +95,11 @@ flashttp.Patch("URL",{
 > ### Performing a DELETE request
 
 ```javascript
+/**
+* For the DELETE request you will need to provide the URL(DELETE or DELETE/:ID) , Optionally a Object(BODY) and Optionally Headers
+e.g. { 'Content-Type': 'application/json , 'Authorization' : 'TOKEN'}
+**/ 
+
 flashttp.Delete("URL",{
     'Content-Type': 'application/json',
   },{}).then(res => {
