@@ -10,12 +10,15 @@ ___
 + Receive data from a server
 + Send data to a server
 + Supports [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
++ easy to understand error messages 
 
 ___
 
 # Installing 
 
- ```npm install flashttp```
+ ```javascript
+ npm install flashttp
+ ```
 
 ___
 
